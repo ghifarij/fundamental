@@ -16,36 +16,51 @@ Create a program to create transaction
 */
 
 class Product {
-    name = "";
-    price = 0;
+    name : string = "";
+    price : number = 0;
 
-    constructor(name: string, price: number) {
+    constructor(name : string, price : number) {
         this.name = name;
         this.price = price;
     };
 };
 
-class Transaction extends Product {
-    total = 0;
-    qty = 0;
+const product1 = new Product("Apple", 20000);
+const product2 = new Product("Pineapple", 18000);
+const product3 = new Product("Watermelon", 9000);
 
-    constructor(name: string, price: number, total: number, qty: number) {
-        super(name, price);
-        this.total = total;
-        this.qty = qty;
-    }
+class Transaction {
+    #total : number = 0;
+    #products : object[] = [];
 
-    addProduct() {
-        
-    }
+    addProduct(product : Product, qty : number) {
+        this.#products.push({
+            ...product, 
+            qty,
+            total : product.price * qty
+        });
+        this.#total += product.price * qty;
+    };
 
     showTotal() {
+        this.#products.push({ total : this.#total});
+        console.table(this.#products);
+    };
 
-    }
-
-    checkOut() {
-
-    }
+    checkout(money : number) {
+        if(money < this.#total) {
+            throw new Error("Not enough money")
+        } else {
+            console.log(`Cash : ${money}\nReturn ${money - this.#total}`);
+            console.log("=== THANK YOU ====")
+        };
+    };
 };
 
-console.log()
+const transaction1 = new Transaction();
+transaction1.addProduct(product1, 10);
+transaction1.addProduct(product3, 10);
+transaction1.addProduct(product2, 10);
+
+transaction1.showTotal();
+transaction1.checkout(1000000);
