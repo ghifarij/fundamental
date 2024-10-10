@@ -1,24 +1,46 @@
-// if there is a new file called solution, it means that it is the lecturer solution
-// if there isn't. The problem is already solved or the lecturer solution is same
-interface Input {
-    [x: string]: any;
-};
+class Employee {
+    name = ""
+    #hour = 0
+    type = ""
+    #bSalary = 0
+    #otSalary = 0
 
-const obj1 : Input = {a: 1, b: "Hello"};
-const obj2 : Input = {a: 1, b: "Hello"};
+    constructor(name : string, type : string, bSalary : number, otSalary : number) {
+        this.name = name
+        this.type = type
+        this.#bSalary = bSalary
+        this.#otSalary = otSalary
+    }
 
-function isEqual(obj1 : Input, obj2: Input) {
-    if(Object.keys(obj1).length !== Object.keys(obj2).length) {
-        return false;
-    };
+    setHour (n : number) {
+        return this.#hour += n
+    }
 
-    for (let key in obj1) {
-        if(obj1[key] !== obj2[key]) {
-            return false
-        };
-    };
+    getSalary() {
+        if(this.#hour > 6) {
+            return 6 * this.#bSalary + (this.#hour - 6) * this.#otSalary;
+        } else {
+            return this.#hour * this.#bSalary;
+        }
+    }
+}
 
-    return true
-};
+class FulltimeEmployee extends Employee {
+    constructor(name : string) {
+        super(name, "Fulltime", 100000, 75000)
+    }
+}
 
-console.log(isEqual(obj1, obj2));
+class ParttimeEmployee extends Employee {
+    constructor(name : string) {
+        super(name, "Parttime", 50000, 30000)
+    }
+}
+
+const employee1 = new FulltimeEmployee("Joni")
+employee1.setHour(6)
+console.log(employee1.getSalary())
+
+const employee2 = new ParttimeEmployee("Doni")
+employee2.setHour(8)
+console.log(employee2.getSalary())
